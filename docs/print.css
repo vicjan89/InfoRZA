@@ -1,0 +1,29 @@
+@media print{@page {size: landscape}}
+
+body {
+    font-size: 12px;
+    font-family: placeholder: Times New Roman
+    background: transparent;
+    background-color: #ffffff;
+    color: #000;
+    box-shadow: none;
+    text-shadow: none;
+    }
+
+h1 {
+  font-size: 14px;
+  text-align: left;
+  text-indent: 30em;
+  line-height: 40%;
+}
+
+h2 {
+  font-size: 14px;
+  text-align: center;
+}
+
+h3 {
+  font-size: 14px;
+  text-align: center;
+}
+

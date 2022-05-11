@@ -1,0 +1,24 @@
+.wy-nav-content {
+    max-width: 1200px !important;
+}
+.wy-table-responsive table td {
+    white-space: normal !important;
+}
+.wy-table-responsive {
+    overflow: visible !important;
+}
+@media print {
+.rst-content table.docutils td {
+    border-bottom: 1px solid #000 !important;
+    border-top: 1px solid #000 !important;
+    border-right: 1px solid #000 !important;
+    border-left: 1px solid #000 !important;
+    page-break-after: always !important;
+}
+.rst-content table.docutils {
+    border: 1px solid #000 !important;
+}
+.rst-content table.docutils th {
+    border: 1px solid #000 !important;
+}
+}

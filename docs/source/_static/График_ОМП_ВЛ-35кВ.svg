@@ -1,0 +1,18 @@
+<svg width="610" height="550" xmlns="http://www.w3.org/2000/svg">>
+ <g id="Layer_1">
+  <title>Layer 1</title>
+  <line fill="none" stroke="#000" x1="70" y1="520" x2="570" y2="520" id="svg_1" stroke-linejoin="undefined" stroke-linecap="undefined"/>
+  <line fill="none" stroke="#000" x1="70" y1="520" x2="70" y2="20" id="svg_2" stroke-linejoin="undefined" stroke-linecap="undefined"/>
+  <line fill="none" stroke="#000" x1="60" y1="20" x2="80" y2="20" id="svg_3" stroke-linejoin="undefined" stroke-linecap="undefined"/>
+  <line fill="none" stroke="#000" x1="570" y1="510" x2="570" y2="530" id="svg_3" stroke-linejoin="undefined" stroke-linecap="undefined"/>
+  <text xml:space="preserve" text-anchor="start" font-family="Noto Sans JP" font-size="24" id="svg_4" y="550" x="550" stroke-width="0" stroke="#000" fill="#000000">500 А</text>
+  <text xml:space="preserve" text-anchor="start" font-family="Noto Sans JP" font-size="24" id="svg_4" y="25" x="2" stroke-width="0" stroke="#000" fill="#000000">50 км</text>
+ </g>
+ <g id="Layer_1" transform="translate(20,520) scale(1,-1)">
+  <title>Layer 1</title>
+    <!--сx ток однофазного КЗ в амперах а cy расстояние в км*10-->
+    <circle cx="400" cy="50" r="4" fill="#000000" /> <!--14.07.21-->
+    <circle cx="300" cy="110" r="4" fill="#000000" /> <!--15.07.21-->
+    <circle cx="350" cy="110" r="4" fill="#000000" /> <!--15.07.21-->
+ </g>
+</svg>
