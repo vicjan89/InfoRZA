@@ -22,7 +22,7 @@ copyright = '2021, Филиал Витебские электрические с
 author = 'СРЗАИ'
 
 # The full version, including alpha/beta/rc tags
-release = 'Версия 0.52'
+release = 'Версия 0.53'
 
 
 # -- General configuration ---------------------------------------------------
@@ -71,7 +71,7 @@ html_logo = "_static/logo.png"
 
 # -- Options for LaTeX output ---------------------------------------------
 # ЦДС - 1, ОДС - 2, ВГРЭС - 3, ВСРЭС - 4, ГРЭС - 5, ШРЭС - 6, РРЭС - 7,
-choice = 7
+choice = 4
 
 latex_engine = 'pdflatex'
 if choice == 1:
