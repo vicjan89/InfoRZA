@@ -10,14 +10,14 @@
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
-# import os
+import os
 # import sys
 # sys.path.insert(0, os.path.abspath('.'))
 
 
 # -- Project information -----------------------------------------------------
-release = 'Версия 0.54'
-project = 'Информация по РЗА\n' + release
+release = 'Вер.0.54'
+project = 'Информация по РЗА' + release
 copyright = '2021, Филиал Витебские электрические сети, Саулич Алексей, Быков Михаил, Беспалов Андрей,Чернов Илья, Жаворонков Николай'
 author = 'СРЗАИ'
 
@@ -68,22 +68,480 @@ html_show_sphinx = False
 html_logo = "_static/logo.png"
 
 # -- Options for LaTeX output ---------------------------------------------
-
-choice = int(input('Введите номер собираемой инструкции (ЦДС - 1, ОДС - 2, ВГРЭС - 3, ВСРЭС - 4, ГРЭС - 5, ШРЭС - 6, РРЭС - 7):'))
-
 latex_engine = 'pdflatex'
-if choice == 1:
-    latex_elements = {
+if os.getenv('CHOICE') == 'on':
+    choice = int(input('Введите номер собираемой инструкции (ЦДС - 1, ОДС - 2, ВГРЭС - 3, ВСРЭС - 4, ГРЭС - 5, ШРЭС - 6, РРЭС - 7):'))
+    if choice == 1:
+        latex_elements = {
+            # The paper size ('letterpaper' or 'a4paper').
+            #
+            'papersize': 'a4paper',
+            'releasename': " ",
+            # Sonny, Lenny, Glenn, Conny, Rejne, Bjarne and Bjornstrup
+            # 'fncychap': '\\usepackage[Lenny]{fncychap}',
+            'fncychap': '\\usepackage{fncychap}',
+            'fontpkg': '\\usepackage{amsmath,amsfonts,amssymb,amsthm}',
+
+            'figure_align': 'htbp',
+            # The font size ('10pt', '11pt' or '12pt').
+            #
+            'pointsize': '12pt',
+
+            # Additional stuff for the LaTeX preamble.
+            #
+            'preamble': r'''
+                %%%%%%%%%%%%%%%%%%%% Meher %%%%%%%%%%%%%%%%%%
+                %%%add number to subsubsection 2=subsection, 3=subsubsection
+                %%% below subsubsection is not good idea.
+                \setcounter{secnumdepth}{3}
+                %
+                %%%% Table of content upto 2=subsection, 3=subsubsection
+                \setcounter{tocdepth}{2}
+    
+                \usepackage{amsmath,amsfonts,amssymb,amsthm}
+                \usepackage{graphicx}
+                \graphicspath{ {./_static/} }
+    
+                %%% reduce spaces for Table of contents, figures and tables
+                %%% it is used "\addtocontents{toc}{\vskip -1.2cm}" etc. in the document
+                \usepackage[notlot,nottoc,notlof]{}
+    
+                \usepackage{color}
+                \usepackage{transparent}
+                \usepackage{eso-pic}
+                \usepackage{lipsum}
+                \usepackage{longtable}
+    
+    
+                \usepackage{footnotebackref} %%link at the footnote to go to the place of footnote in the text
+    
+                %% spacing between line
+                \usepackage{setspace}
+                %%%%\onehalfspacing
+                %%%%\doublespacing
+                \singlespacing
+    
+    
+                %%%%%%%%%%% datetime
+                \usepackage{datetime}
+                \usepackage{svg}
+    
+                \newdateformat{MonthYearFormat}{%
+                    \monthname[\THEMONTH], \THEYEAR}
+    
+    
+                %% RO, LE will not work for 'oneside' layout.
+                %% Change oneside to twoside in document class
+                \usepackage{fancyhdr}
+                \pagestyle{fancy}
+                \fancyhf{}
+    
+                %%% Alternating Header for oneside
+                \fancyhead[L]{\ifthenelse{\isodd{\value{page}}}{ \small \nouppercase{\leftmark} }{}}
+                \fancyhead[R]{\ifthenelse{\isodd{\value{page}}}{}{ \small \nouppercase{\rightmark} }}
+    
+                %%% Alternating Header for two side
+                %\fancyhead[RO]{\small \nouppercase{\rightmark}}
+                %\fancyhead[LE]{\small \nouppercase{\leftmark}}
+    
+                %% for oneside: change footer at right side. If you want to use Left and right then use same as header defined above.
+                \fancyfoot[R]{\ifthenelse{\isodd{\value{page}}}{{\tiny Meher Krishna Patel} }{\href{http://pythondsp.readthedocs.io/en/latest/pythondsp/toc.html}{\tiny PythonDSP}}}
+    
+                %%% Alternating Footer for two side
+                %\fancyfoot[RO, RE]{\scriptsize Meher Krishna Patel (mekrip@gmail.com)}
+    
+                %%% page number
+                \fancyfoot[CO, CE]{\thepage}
+    
+                \renewcommand{\headrulewidth}{0.5pt}
+                \renewcommand{\footrulewidth}{0.5pt}
+    
+                \RequirePackage{tocbibind} %%% comment this to remove page number for following
+                \addto\captionsenglish{\renewcommand{\contentsname}{Оглавление}}
+                % \addto\captionsenglish{\renewcommand{\listfigurename}{List of figures}}
+                % \addto\captionsenglish{\renewcommand{\listtablename}{List of tables}}
+                % \addto\captionsenglish{\renewcommand{\chaptername}{Chapter}}
+    
+    
+                %%reduce spacing for itemize
+                \usepackage{enumitem}
+                \setlist{nosep}
+    
+                %%%%%%%%%%% Quote Styles at the top of chapter
+                \usepackage{epigraph}
+                \setlength{\epigraphwidth}{0.8\columnwidth}
+                \newcommand{\chapterquote}[2]{\epigraphhead[60]{\epigraph{\textit{#1}}{\textbf {\textit{--#2}}}}}
+                %%%%%%%%%%% Quote for all places except Chapter
+                \newcommand{\sectionquote}[2]{{\quote{\textit{``#1''}}{\textbf {\textit{--#2}}}}}
+            ''',
+
+            'maketitle': r'''
+                \pagenumbering{Roman} %%% to avoid page 1 conflict with actual page 1
+    
+                \begin{titlepage}
+    
+                   \begin{figure}[h]
+                        \raggedleft
+                        \includegraphics{C:/Users/rzi1/InfoRZA/docs/source/_static/UtvBindovsky.png}
+                    \end{figure}
+    
+        %           \large
+        %           \leftskip=300pt УТВЕРЖДАЮ\\
+        %            Первый заместитель директора-\\
+        %            главный инженер\\
+        %            {\_}{\_}{\_}{\_}{\_}{\_}С.О.Биндовский\\
+        %            13.04.2022г.\\
+    
+                   \leftskip=20pt
+                   \vspace{120pt}
+                   ИНСТРУКЦИЯ\\
+                    20.04.2022г. №{\_}{\_}{\_}{\_}{\_}{\_}\\
+                    г.Витебск\\
+                    по эксплуатации РЗА филиала "Витебские электрические сети" для ЦДС
+                \end{titlepage}
+                \clearpage
+                \clearpage
+                \renewcommand\contentsname{Оглавление}
+                \tableofcontents
+                \pagenumbering{arabic}
+                \clearpage
+    
+                ''',
+            # Latex figure (float) alignment
+            #
+            # 'figure_align': 'htbp',
+            'sphinxsetup': \
+                'hmargin={0.7in,0.7in}, vmargin={1in,1in}, \
+                verbatimwithframe=true, \
+                TitleColor={rgb}{0,0,0}, \
+                HeaderFamily=\\rmfamily\\bfseries, \
+                InnerLinkColor={rgb}{0,0,1}, \
+                OuterLinkColor={rgb}{0,0,1}',
+
+            'tableofcontents': '',
+
+        }
+        latex_documents = [
+            ('index_cds', 'sphinx.tex', 'Инструкция по эксплуатации РЗА ВЭС для ЦДС',
+             '', 'report')]
+    elif choice == 2:
+        latex_elements = {
+            # The paper size ('letterpaper' or 'a4paper').
+            #
+            'papersize': 'a4paper',
+            'releasename': " ",
+            # Sonny, Lenny, Glenn, Conny, Rejne, Bjarne and Bjornstrup
+            # 'fncychap': '\\usepackage[Lenny]{fncychap}',
+            'fncychap': '\\usepackage{fncychap}',
+            'fontpkg': '\\usepackage{amsmath,amsfonts,amssymb,amsthm}',
+
+            'figure_align': 'htbp',
+            # The font size ('10pt', '11pt' or '12pt').
+            #
+            'pointsize': '12pt',
+
+            # Additional stuff for the LaTeX preamble.
+            #
+            'preamble': r'''
+                %%%%%%%%%%%%%%%%%%%% Meher %%%%%%%%%%%%%%%%%%
+                %%%add number to subsubsection 2=subsection, 3=subsubsection
+                %%% below subsubsection is not good idea.
+                \setcounter{secnumdepth}{3}
+                %
+                %%%% Table of content upto 2=subsection, 3=subsubsection
+                \setcounter{tocdepth}{2}
+    
+                \usepackage{amsmath,amsfonts,amssymb,amsthm}
+                \usepackage{graphicx}
+                \graphicspath{ {./_static/} }
+    
+                %%% reduce spaces for Table of contents, figures and tables
+                %%% it is used "\addtocontents{toc}{\vskip -1.2cm}" etc. in the document
+                \usepackage[notlot,nottoc,notlof]{}
+    
+                \usepackage{color}
+                \usepackage{transparent}
+                \usepackage{eso-pic}
+                \usepackage{lipsum}
+                \usepackage{longtable}
+    
+    
+                \usepackage{footnotebackref} %%link at the footnote to go to the place of footnote in the text
+    
+                %% spacing between line
+                \usepackage{setspace}
+                %%%%\onehalfspacing
+                %%%%\doublespacing
+                \singlespacing
+    
+    
+                %%%%%%%%%%% datetime
+                \usepackage{datetime}
+                \usepackage{svg}
+    
+                \newdateformat{MonthYearFormat}{%
+                    \monthname[\THEMONTH], \THEYEAR}
+    
+    
+                %% RO, LE will not work for 'oneside' layout.
+                %% Change oneside to twoside in document class
+                \usepackage{fancyhdr}
+                \pagestyle{fancy}
+                \fancyhf{}
+    
+                %%% Alternating Header for oneside
+                \fancyhead[L]{\ifthenelse{\isodd{\value{page}}}{ \small \nouppercase{\leftmark} }{}}
+                \fancyhead[R]{\ifthenelse{\isodd{\value{page}}}{}{ \small \nouppercase{\rightmark} }}
+    
+                %%% Alternating Header for two side
+                %\fancyhead[RO]{\small \nouppercase{\rightmark}}
+                %\fancyhead[LE]{\small \nouppercase{\leftmark}}
+    
+                %% for oneside: change footer at right side. If you want to use Left and right then use same as header defined above.
+                \fancyfoot[R]{\ifthenelse{\isodd{\value{page}}}{{\tiny Meher Krishna Patel} }{\href{http://pythondsp.readthedocs.io/en/latest/pythondsp/toc.html}{\tiny PythonDSP}}}
+    
+                %%% Alternating Footer for two side
+                %\fancyfoot[RO, RE]{\scriptsize Meher Krishna Patel (mekrip@gmail.com)}
+    
+                %%% page number
+                \fancyfoot[CO, CE]{\thepage}
+    
+                \renewcommand{\headrulewidth}{0.5pt}
+                \renewcommand{\footrulewidth}{0.5pt}
+    
+                \RequirePackage{tocbibind} %%% comment this to remove page number for following
+                \addto\captionsenglish{\renewcommand{\contentsname}{Оглавление}}
+                % \addto\captionsenglish{\renewcommand{\listfigurename}{List of figures}}
+                % \addto\captionsenglish{\renewcommand{\listtablename}{List of tables}}
+                % \addto\captionsenglish{\renewcommand{\chaptername}{Chapter}}
+    
+    
+                %%reduce spacing for itemize
+                \usepackage{enumitem}
+                \setlist{nosep}
+    
+                %%%%%%%%%%% Quote Styles at the top of chapter
+                \usepackage{epigraph}
+                \setlength{\epigraphwidth}{0.8\columnwidth}
+                \newcommand{\chapterquote}[2]{\epigraphhead[60]{\epigraph{\textit{#1}}{\textbf {\textit{--#2}}}}}
+                %%%%%%%%%%% Quote for all places except Chapter
+                \newcommand{\sectionquote}[2]{{\quote{\textit{``#1''}}{\textbf {\textit{--#2}}}}}
+            ''',
+
+            'maketitle': r'''
+                \pagenumbering{Roman} %%% to avoid page 1 conflict with actual page 1
+    
+                \begin{titlepage}
+    
+                   \begin{figure}[h]
+                        \raggedleft
+                        \includegraphics{C:/Users/rzi1/InfoRZA/docs/source/_static/UtvBindovsky.png}
+                    \end{figure}
+    
+        %           \large
+        %           \leftskip=300pt УТВЕРЖДАЮ\\
+        %            Первый заместитель директора-\\
+        %            главный инженер\\
+        %            {\_}{\_}{\_}{\_}{\_}{\_}С.О.Биндовский\\
+        %            13.04.2022г.\\
+    
+                   \leftskip=20pt
+                   \vspace{120pt}
+                   ИНСТРУКЦИЯ\\
+                    13.04.2022г. №{\_}{\_}{\_}{\_}{\_}{\_}\\
+                    г.Витебск\\
+                    по эксплуатации РЗА ОДС
+                \end{titlepage}
+                \clearpage
+                \clearpage
+                \renewcommand\contentsname{Оглавление}
+                \tableofcontents
+                \pagenumbering{arabic}
+                \clearpage
+    
+                ''',
+            # Latex figure (float) alignment
+            #
+            # 'figure_align': 'htbp',
+            'sphinxsetup': \
+                'hmargin={0.7in,0.7in}, vmargin={1in,1in}, \
+                verbatimwithframe=true, \
+                TitleColor={rgb}{0,0,0}, \
+                HeaderFamily=\\rmfamily\\bfseries, \
+                InnerLinkColor={rgb}{0,0,1}, \
+                OuterLinkColor={rgb}{0,0,1}',
+
+            'tableofcontents': '',
+
+        }
+        latex_documents = [
+            ('index_ods', 'sphinx.tex', 'Инструкция по эксплуатации РЗА ОДС',
+             '', 'report')]
+    elif choice == 3:
+        latex_elements = {
+            # The paper size ('letterpaper' or 'a4paper').
+            #
+            'papersize': 'a4paper',
+            'releasename': " ",
+            # Sonny, Lenny, Glenn, Conny, Rejne, Bjarne and Bjornstrup
+            # 'fncychap': '\\usepackage[Lenny]{fncychap}',
+            'fncychap': '\\usepackage{fncychap}',
+            'fontpkg': '\\usepackage{amsmath,amsfonts,amssymb,amsthm}',
+
+            'figure_align': 'htbp',
+            # The font size ('10pt', '11pt' or '12pt').
+            #
+            'pointsize': '12pt',
+
+            # Additional stuff for the LaTeX preamble.
+            #
+            'preamble': r'''
+                %%%%%%%%%%%%%%%%%%%% Meher %%%%%%%%%%%%%%%%%%
+                %%%add number to subsubsection 2=subsection, 3=subsubsection
+                %%% below subsubsection is not good idea.
+                \setcounter{secnumdepth}{3}
+                %
+                %%%% Table of content upto 2=subsection, 3=subsubsection
+                \setcounter{tocdepth}{2}
+    
+                \usepackage{amsmath,amsfonts,amssymb,amsthm}
+                \usepackage{graphicx}
+                \graphicspath{ {./_static/} }
+    
+                %%% reduce spaces for Table of contents, figures and tables
+                %%% it is used "\addtocontents{toc}{\vskip -1.2cm}" etc. in the document
+                \usepackage[notlot,nottoc,notlof]{}
+    
+                \usepackage{color}
+                \usepackage{transparent}
+                \usepackage{eso-pic}
+                \usepackage{lipsum}
+                \usepackage{longtable}
+    
+    
+                \usepackage{footnotebackref} %%link at the footnote to go to the place of footnote in the text
+    
+                %% spacing between line
+                \usepackage{setspace}
+                %%%%\onehalfspacing
+                %%%%\doublespacing
+                \singlespacing
+    
+    
+                %%%%%%%%%%% datetime
+                \usepackage{datetime}
+                \usepackage{svg}
+    
+                \newdateformat{MonthYearFormat}{%
+                    \monthname[\THEMONTH], \THEYEAR}
+    
+    
+                %% RO, LE will not work for 'oneside' layout.
+                %% Change oneside to twoside in document class
+                \usepackage{fancyhdr}
+                \pagestyle{fancy}
+                \fancyhf{}
+    
+                %%% Alternating Header for oneside
+                \fancyhead[L]{\ifthenelse{\isodd{\value{page}}}{ \small \nouppercase{\leftmark} }{}}
+                \fancyhead[R]{\ifthenelse{\isodd{\value{page}}}{}{ \small \nouppercase{\rightmark} }}
+    
+                %%% Alternating Header for two side
+                %\fancyhead[RO]{\small \nouppercase{\rightmark}}
+                %\fancyhead[LE]{\small \nouppercase{\leftmark}}
+    
+                %% for oneside: change footer at right side. If you want to use Left and right then use same as header defined above.
+                \fancyfoot[R]{\ifthenelse{\isodd{\value{page}}}{{\tiny Meher Krishna Patel} }{\href{http://pythondsp.readthedocs.io/en/latest/pythondsp/toc.html}{\tiny PythonDSP}}}
+    
+                %%% Alternating Footer for two side
+                %\fancyfoot[RO, RE]{\scriptsize Meher Krishna Patel (mekrip@gmail.com)}
+    
+                %%% page number
+                \fancyfoot[CO, CE]{\thepage}
+    
+                \renewcommand{\headrulewidth}{0.5pt}
+                \renewcommand{\footrulewidth}{0.5pt}
+    
+                \RequirePackage{tocbibind} %%% comment this to remove page number for following
+                \addto\captionsenglish{\renewcommand{\contentsname}{Оглавление}}
+                % \addto\captionsenglish{\renewcommand{\listfigurename}{List of figures}}
+                % \addto\captionsenglish{\renewcommand{\listtablename}{List of tables}}
+                % \addto\captionsenglish{\renewcommand{\chaptername}{Chapter}}
+    
+    
+                %%reduce spacing for itemize
+                \usepackage{enumitem}
+                \setlist{nosep}
+    
+                %%%%%%%%%%% Quote Styles at the top of chapter
+                \usepackage{epigraph}
+                \setlength{\epigraphwidth}{0.8\columnwidth}
+                \newcommand{\chapterquote}[2]{\epigraphhead[60]{\epigraph{\textit{#1}}{\textbf {\textit{--#2}}}}}
+                %%%%%%%%%%% Quote for all places except Chapter
+                \newcommand{\sectionquote}[2]{{\quote{\textit{``#1''}}{\textbf {\textit{--#2}}}}}
+            ''',
+
+            'maketitle': r'''
+                \pagenumbering{Roman} %%% to avoid page 1 conflict with actual page 1
+    
+                \begin{titlepage}
+    
+                   \begin{figure}[h]
+                        \raggedleft
+                        \includegraphics{C:/Users/rzi1/InfoRZA/docs/source/_static/UtvRubchenko.png}
+                    \end{figure}
+    
+        %           \large
+        %           \leftskip=300pt УТВЕРЖДАЮ\\
+        %            Первый заместитель директора-\\
+        %            главный инженер\\
+        %            {\_}{\_}{\_}{\_}{\_}{\_}С.О.Биндовский\\
+        %            13.04.2022г.\\
+    
+                   \leftskip=20pt
+                   \vspace{120pt}
+                   ИНСТРУКЦИЯ\\
+                    20.09.2021г. №{\_}{\_}{\_}{\_}{\_}{\_}\\
+                    г.Витебск\\
+                    по эксплуатации РЗА ВГРЭС
+                \end{titlepage}
+                \clearpage
+                \clearpage
+                \renewcommand\contentsname{Оглавление}
+                \tableofcontents
+                \pagenumbering{arabic}
+                \clearpage
+    
+                ''',
+            # Latex figure (float) alignment
+            #
+            # 'figure_align': 'htbp',
+            'sphinxsetup': \
+                'hmargin={0.7in,0.7in}, vmargin={1in,1in}, \
+                verbatimwithframe=true, \
+                TitleColor={rgb}{0,0,0}, \
+                HeaderFamily=\\rmfamily\\bfseries, \
+                InnerLinkColor={rgb}{0,0,1}, \
+                OuterLinkColor={rgb}{0,0,1}',
+
+            'tableofcontents': '',
+
+        }
+        latex_documents = [
+            ('index_vgres', 'sphinx.tex', 'Инструкция по эксплуатации РЗА ВГРЭС',
+             '', 'report')]
+    elif choice == 4:
+        latex_elements = {
         # The paper size ('letterpaper' or 'a4paper').
         #
         'papersize': 'a4paper',
-        'releasename': " ",
+        'releasename':" ",
         # Sonny, Lenny, Glenn, Conny, Rejne, Bjarne and Bjornstrup
         # 'fncychap': '\\usepackage[Lenny]{fncychap}',
         'fncychap': '\\usepackage{fncychap}',
         'fontpkg': '\\usepackage{amsmath,amsfonts,amssymb,amsthm}',
 
-        'figure_align': 'htbp',
+        'figure_align':'htbp',
         # The font size ('10pt', '11pt' or '12pt').
         #
         'pointsize': '12pt',
@@ -98,76 +556,76 @@ if choice == 1:
             %
             %%%% Table of content upto 2=subsection, 3=subsubsection
             \setcounter{tocdepth}{2}
-
+    
             \usepackage{amsmath,amsfonts,amssymb,amsthm}
             \usepackage{graphicx}
             \graphicspath{ {./_static/} }
-
+    
             %%% reduce spaces for Table of contents, figures and tables
             %%% it is used "\addtocontents{toc}{\vskip -1.2cm}" etc. in the document
             \usepackage[notlot,nottoc,notlof]{}
-
+    
             \usepackage{color}
             \usepackage{transparent}
             \usepackage{eso-pic}
             \usepackage{lipsum}
             \usepackage{longtable}
-
-
+                   
+            
             \usepackage{footnotebackref} %%link at the footnote to go to the place of footnote in the text
-
+    
             %% spacing between line
             \usepackage{setspace}
             %%%%\onehalfspacing
             %%%%\doublespacing
             \singlespacing
-
-
+    
+    
             %%%%%%%%%%% datetime
             \usepackage{datetime}
             \usepackage{svg}
-
+    
             \newdateformat{MonthYearFormat}{%
                 \monthname[\THEMONTH], \THEYEAR}
-
-
+    
+    
             %% RO, LE will not work for 'oneside' layout.
             %% Change oneside to twoside in document class
             \usepackage{fancyhdr}
             \pagestyle{fancy}
             \fancyhf{}
-
+    
             %%% Alternating Header for oneside
             \fancyhead[L]{\ifthenelse{\isodd{\value{page}}}{ \small \nouppercase{\leftmark} }{}}
             \fancyhead[R]{\ifthenelse{\isodd{\value{page}}}{}{ \small \nouppercase{\rightmark} }}
-
+    
             %%% Alternating Header for two side
             %\fancyhead[RO]{\small \nouppercase{\rightmark}}
             %\fancyhead[LE]{\small \nouppercase{\leftmark}}
-
+    
             %% for oneside: change footer at right side. If you want to use Left and right then use same as header defined above.
             \fancyfoot[R]{\ifthenelse{\isodd{\value{page}}}{{\tiny Meher Krishna Patel} }{\href{http://pythondsp.readthedocs.io/en/latest/pythondsp/toc.html}{\tiny PythonDSP}}}
-
+    
             %%% Alternating Footer for two side
             %\fancyfoot[RO, RE]{\scriptsize Meher Krishna Patel (mekrip@gmail.com)}
-
+    
             %%% page number
             \fancyfoot[CO, CE]{\thepage}
-
+    
             \renewcommand{\headrulewidth}{0.5pt}
             \renewcommand{\footrulewidth}{0.5pt}
-
+    
             \RequirePackage{tocbibind} %%% comment this to remove page number for following
             \addto\captionsenglish{\renewcommand{\contentsname}{Оглавление}}
             % \addto\captionsenglish{\renewcommand{\listfigurename}{List of figures}}
             % \addto\captionsenglish{\renewcommand{\listtablename}{List of tables}}
             % \addto\captionsenglish{\renewcommand{\chaptername}{Chapter}}
-
-
+    
+    
             %%reduce spacing for itemize
             \usepackage{enumitem}
             \setlist{nosep}
-
+    
             %%%%%%%%%%% Quote Styles at the top of chapter
             \usepackage{epigraph}
             \setlength{\epigraphwidth}{0.8\columnwidth}
@@ -176,644 +634,30 @@ if choice == 1:
             \newcommand{\sectionquote}[2]{{\quote{\textit{``#1''}}{\textbf {\textit{--#2}}}}}
         ''',
 
+
         'maketitle': r'''
             \pagenumbering{Roman} %%% to avoid page 1 conflict with actual page 1
-
+    
             \begin{titlepage}
-
+            
                \begin{figure}[h]
                     \raggedleft
                     \includegraphics{C:/Users/rzi1/InfoRZA/docs/source/_static/UtvBindovsky.png}
                 \end{figure}
-
+    
     %           \large
     %           \leftskip=300pt УТВЕРЖДАЮ\\
     %            Первый заместитель директора-\\
     %            главный инженер\\
     %            {\_}{\_}{\_}{\_}{\_}{\_}С.О.Биндовский\\
     %            13.04.2022г.\\
-
-               \leftskip=20pt
-               \vspace{120pt}
-               ИНСТРУКЦИЯ\\
-                20.04.2022г. №{\_}{\_}{\_}{\_}{\_}{\_}\\
-                г.Витебск\\
-                по эксплуатации РЗА филиала "Витебские электрические сети" для ЦДС
-            \end{titlepage}
-            \clearpage
-            \clearpage
-            \renewcommand\contentsname{Оглавление}
-            \tableofcontents
-            \pagenumbering{arabic}
-            \clearpage
-
-            ''',
-        # Latex figure (float) alignment
-        #
-        # 'figure_align': 'htbp',
-        'sphinxsetup': \
-            'hmargin={0.7in,0.7in}, vmargin={1in,1in}, \
-            verbatimwithframe=true, \
-            TitleColor={rgb}{0,0,0}, \
-            HeaderFamily=\\rmfamily\\bfseries, \
-            InnerLinkColor={rgb}{0,0,1}, \
-            OuterLinkColor={rgb}{0,0,1}',
-
-        'tableofcontents': '',
-
-    }
-    latex_documents = [
-        ('index_cds', 'sphinx.tex', 'Инструкция по эксплуатации РЗА ВЭС для ЦДС',
-         '', 'report')]
-elif choice == 2:
-    latex_elements = {
-        # The paper size ('letterpaper' or 'a4paper').
-        #
-        'papersize': 'a4paper',
-        'releasename': " ",
-        # Sonny, Lenny, Glenn, Conny, Rejne, Bjarne and Bjornstrup
-        # 'fncychap': '\\usepackage[Lenny]{fncychap}',
-        'fncychap': '\\usepackage{fncychap}',
-        'fontpkg': '\\usepackage{amsmath,amsfonts,amssymb,amsthm}',
-
-        'figure_align': 'htbp',
-        # The font size ('10pt', '11pt' or '12pt').
-        #
-        'pointsize': '12pt',
-
-        # Additional stuff for the LaTeX preamble.
-        #
-        'preamble': r'''
-            %%%%%%%%%%%%%%%%%%%% Meher %%%%%%%%%%%%%%%%%%
-            %%%add number to subsubsection 2=subsection, 3=subsubsection
-            %%% below subsubsection is not good idea.
-            \setcounter{secnumdepth}{3}
-            %
-            %%%% Table of content upto 2=subsection, 3=subsubsection
-            \setcounter{tocdepth}{2}
-
-            \usepackage{amsmath,amsfonts,amssymb,amsthm}
-            \usepackage{graphicx}
-            \graphicspath{ {./_static/} }
-
-            %%% reduce spaces for Table of contents, figures and tables
-            %%% it is used "\addtocontents{toc}{\vskip -1.2cm}" etc. in the document
-            \usepackage[notlot,nottoc,notlof]{}
-
-            \usepackage{color}
-            \usepackage{transparent}
-            \usepackage{eso-pic}
-            \usepackage{lipsum}
-            \usepackage{longtable}
-
-
-            \usepackage{footnotebackref} %%link at the footnote to go to the place of footnote in the text
-
-            %% spacing between line
-            \usepackage{setspace}
-            %%%%\onehalfspacing
-            %%%%\doublespacing
-            \singlespacing
-
-
-            %%%%%%%%%%% datetime
-            \usepackage{datetime}
-            \usepackage{svg}
-
-            \newdateformat{MonthYearFormat}{%
-                \monthname[\THEMONTH], \THEYEAR}
-
-
-            %% RO, LE will not work for 'oneside' layout.
-            %% Change oneside to twoside in document class
-            \usepackage{fancyhdr}
-            \pagestyle{fancy}
-            \fancyhf{}
-
-            %%% Alternating Header for oneside
-            \fancyhead[L]{\ifthenelse{\isodd{\value{page}}}{ \small \nouppercase{\leftmark} }{}}
-            \fancyhead[R]{\ifthenelse{\isodd{\value{page}}}{}{ \small \nouppercase{\rightmark} }}
-
-            %%% Alternating Header for two side
-            %\fancyhead[RO]{\small \nouppercase{\rightmark}}
-            %\fancyhead[LE]{\small \nouppercase{\leftmark}}
-
-            %% for oneside: change footer at right side. If you want to use Left and right then use same as header defined above.
-            \fancyfoot[R]{\ifthenelse{\isodd{\value{page}}}{{\tiny Meher Krishna Patel} }{\href{http://pythondsp.readthedocs.io/en/latest/pythondsp/toc.html}{\tiny PythonDSP}}}
-
-            %%% Alternating Footer for two side
-            %\fancyfoot[RO, RE]{\scriptsize Meher Krishna Patel (mekrip@gmail.com)}
-
-            %%% page number
-            \fancyfoot[CO, CE]{\thepage}
-
-            \renewcommand{\headrulewidth}{0.5pt}
-            \renewcommand{\footrulewidth}{0.5pt}
-
-            \RequirePackage{tocbibind} %%% comment this to remove page number for following
-            \addto\captionsenglish{\renewcommand{\contentsname}{Оглавление}}
-            % \addto\captionsenglish{\renewcommand{\listfigurename}{List of figures}}
-            % \addto\captionsenglish{\renewcommand{\listtablename}{List of tables}}
-            % \addto\captionsenglish{\renewcommand{\chaptername}{Chapter}}
-
-
-            %%reduce spacing for itemize
-            \usepackage{enumitem}
-            \setlist{nosep}
-
-            %%%%%%%%%%% Quote Styles at the top of chapter
-            \usepackage{epigraph}
-            \setlength{\epigraphwidth}{0.8\columnwidth}
-            \newcommand{\chapterquote}[2]{\epigraphhead[60]{\epigraph{\textit{#1}}{\textbf {\textit{--#2}}}}}
-            %%%%%%%%%%% Quote for all places except Chapter
-            \newcommand{\sectionquote}[2]{{\quote{\textit{``#1''}}{\textbf {\textit{--#2}}}}}
-        ''',
-
-        'maketitle': r'''
-            \pagenumbering{Roman} %%% to avoid page 1 conflict with actual page 1
-
-            \begin{titlepage}
-
-               \begin{figure}[h]
-                    \raggedleft
-                    \includegraphics{C:/Users/rzi1/InfoRZA/docs/source/_static/UtvBindovsky.png}
-                \end{figure}
-
-    %           \large
-    %           \leftskip=300pt УТВЕРЖДАЮ\\
-    %            Первый заместитель директора-\\
-    %            главный инженер\\
-    %            {\_}{\_}{\_}{\_}{\_}{\_}С.О.Биндовский\\
-    %            13.04.2022г.\\
-
-               \leftskip=20pt
-               \vspace{120pt}
-               ИНСТРУКЦИЯ\\
-                13.04.2022г. №{\_}{\_}{\_}{\_}{\_}{\_}\\
-                г.Витебск\\
-                по эксплуатации РЗА ОДС
-            \end{titlepage}
-            \clearpage
-            \clearpage
-            \renewcommand\contentsname{Оглавление}
-            \tableofcontents
-            \pagenumbering{arabic}
-            \clearpage
-
-            ''',
-        # Latex figure (float) alignment
-        #
-        # 'figure_align': 'htbp',
-        'sphinxsetup': \
-            'hmargin={0.7in,0.7in}, vmargin={1in,1in}, \
-            verbatimwithframe=true, \
-            TitleColor={rgb}{0,0,0}, \
-            HeaderFamily=\\rmfamily\\bfseries, \
-            InnerLinkColor={rgb}{0,0,1}, \
-            OuterLinkColor={rgb}{0,0,1}',
-
-        'tableofcontents': '',
-
-    }
-    latex_documents = [
-        ('index_ods', 'sphinx.tex', 'Инструкция по эксплуатации РЗА ОДС',
-         '', 'report')]
-elif choice == 3:
-    latex_elements = {
-        # The paper size ('letterpaper' or 'a4paper').
-        #
-        'papersize': 'a4paper',
-        'releasename': " ",
-        # Sonny, Lenny, Glenn, Conny, Rejne, Bjarne and Bjornstrup
-        # 'fncychap': '\\usepackage[Lenny]{fncychap}',
-        'fncychap': '\\usepackage{fncychap}',
-        'fontpkg': '\\usepackage{amsmath,amsfonts,amssymb,amsthm}',
-
-        'figure_align': 'htbp',
-        # The font size ('10pt', '11pt' or '12pt').
-        #
-        'pointsize': '12pt',
-
-        # Additional stuff for the LaTeX preamble.
-        #
-        'preamble': r'''
-            %%%%%%%%%%%%%%%%%%%% Meher %%%%%%%%%%%%%%%%%%
-            %%%add number to subsubsection 2=subsection, 3=subsubsection
-            %%% below subsubsection is not good idea.
-            \setcounter{secnumdepth}{3}
-            %
-            %%%% Table of content upto 2=subsection, 3=subsubsection
-            \setcounter{tocdepth}{2}
-
-            \usepackage{amsmath,amsfonts,amssymb,amsthm}
-            \usepackage{graphicx}
-            \graphicspath{ {./_static/} }
-
-            %%% reduce spaces for Table of contents, figures and tables
-            %%% it is used "\addtocontents{toc}{\vskip -1.2cm}" etc. in the document
-            \usepackage[notlot,nottoc,notlof]{}
-
-            \usepackage{color}
-            \usepackage{transparent}
-            \usepackage{eso-pic}
-            \usepackage{lipsum}
-            \usepackage{longtable}
-
-
-            \usepackage{footnotebackref} %%link at the footnote to go to the place of footnote in the text
-
-            %% spacing between line
-            \usepackage{setspace}
-            %%%%\onehalfspacing
-            %%%%\doublespacing
-            \singlespacing
-
-
-            %%%%%%%%%%% datetime
-            \usepackage{datetime}
-            \usepackage{svg}
-
-            \newdateformat{MonthYearFormat}{%
-                \monthname[\THEMONTH], \THEYEAR}
-
-
-            %% RO, LE will not work for 'oneside' layout.
-            %% Change oneside to twoside in document class
-            \usepackage{fancyhdr}
-            \pagestyle{fancy}
-            \fancyhf{}
-
-            %%% Alternating Header for oneside
-            \fancyhead[L]{\ifthenelse{\isodd{\value{page}}}{ \small \nouppercase{\leftmark} }{}}
-            \fancyhead[R]{\ifthenelse{\isodd{\value{page}}}{}{ \small \nouppercase{\rightmark} }}
-
-            %%% Alternating Header for two side
-            %\fancyhead[RO]{\small \nouppercase{\rightmark}}
-            %\fancyhead[LE]{\small \nouppercase{\leftmark}}
-
-            %% for oneside: change footer at right side. If you want to use Left and right then use same as header defined above.
-            \fancyfoot[R]{\ifthenelse{\isodd{\value{page}}}{{\tiny Meher Krishna Patel} }{\href{http://pythondsp.readthedocs.io/en/latest/pythondsp/toc.html}{\tiny PythonDSP}}}
-
-            %%% Alternating Footer for two side
-            %\fancyfoot[RO, RE]{\scriptsize Meher Krishna Patel (mekrip@gmail.com)}
-
-            %%% page number
-            \fancyfoot[CO, CE]{\thepage}
-
-            \renewcommand{\headrulewidth}{0.5pt}
-            \renewcommand{\footrulewidth}{0.5pt}
-
-            \RequirePackage{tocbibind} %%% comment this to remove page number for following
-            \addto\captionsenglish{\renewcommand{\contentsname}{Оглавление}}
-            % \addto\captionsenglish{\renewcommand{\listfigurename}{List of figures}}
-            % \addto\captionsenglish{\renewcommand{\listtablename}{List of tables}}
-            % \addto\captionsenglish{\renewcommand{\chaptername}{Chapter}}
-
-
-            %%reduce spacing for itemize
-            \usepackage{enumitem}
-            \setlist{nosep}
-
-            %%%%%%%%%%% Quote Styles at the top of chapter
-            \usepackage{epigraph}
-            \setlength{\epigraphwidth}{0.8\columnwidth}
-            \newcommand{\chapterquote}[2]{\epigraphhead[60]{\epigraph{\textit{#1}}{\textbf {\textit{--#2}}}}}
-            %%%%%%%%%%% Quote for all places except Chapter
-            \newcommand{\sectionquote}[2]{{\quote{\textit{``#1''}}{\textbf {\textit{--#2}}}}}
-        ''',
-
-        'maketitle': r'''
-            \pagenumbering{Roman} %%% to avoid page 1 conflict with actual page 1
-
-            \begin{titlepage}
-
-               \begin{figure}[h]
-                    \raggedleft
-                    \includegraphics{C:/Users/rzi1/InfoRZA/docs/source/_static/UtvRubchenko.png}
-                \end{figure}
-
-    %           \large
-    %           \leftskip=300pt УТВЕРЖДАЮ\\
-    %            Первый заместитель директора-\\
-    %            главный инженер\\
-    %            {\_}{\_}{\_}{\_}{\_}{\_}С.О.Биндовский\\
-    %            13.04.2022г.\\
-
-               \leftskip=20pt
-               \vspace{120pt}
-               ИНСТРУКЦИЯ\\
-                20.09.2021г. №{\_}{\_}{\_}{\_}{\_}{\_}\\
-                г.Витебск\\
-                по эксплуатации РЗА ВГРЭС
-            \end{titlepage}
-            \clearpage
-            \clearpage
-            \renewcommand\contentsname{Оглавление}
-            \tableofcontents
-            \pagenumbering{arabic}
-            \clearpage
-
-            ''',
-        # Latex figure (float) alignment
-        #
-        # 'figure_align': 'htbp',
-        'sphinxsetup': \
-            'hmargin={0.7in,0.7in}, vmargin={1in,1in}, \
-            verbatimwithframe=true, \
-            TitleColor={rgb}{0,0,0}, \
-            HeaderFamily=\\rmfamily\\bfseries, \
-            InnerLinkColor={rgb}{0,0,1}, \
-            OuterLinkColor={rgb}{0,0,1}',
-
-        'tableofcontents': '',
-
-    }
-    latex_documents = [
-        ('index_vgres', 'sphinx.tex', 'Инструкция по эксплуатации РЗА ВГРЭС',
-         '', 'report')]
-elif choice == 4:
-    latex_elements = {
-    # The paper size ('letterpaper' or 'a4paper').
-    #
-    'papersize': 'a4paper',
-    'releasename':" ",
-    # Sonny, Lenny, Glenn, Conny, Rejne, Bjarne and Bjornstrup
-    # 'fncychap': '\\usepackage[Lenny]{fncychap}',
-    'fncychap': '\\usepackage{fncychap}',
-    'fontpkg': '\\usepackage{amsmath,amsfonts,amssymb,amsthm}',
-
-    'figure_align':'htbp',
-    # The font size ('10pt', '11pt' or '12pt').
-    #
-    'pointsize': '12pt',
-
-    # Additional stuff for the LaTeX preamble.
-    #
-    'preamble': r'''
-        %%%%%%%%%%%%%%%%%%%% Meher %%%%%%%%%%%%%%%%%%
-        %%%add number to subsubsection 2=subsection, 3=subsubsection
-        %%% below subsubsection is not good idea.
-        \setcounter{secnumdepth}{3}
-        %
-        %%%% Table of content upto 2=subsection, 3=subsubsection
-        \setcounter{tocdepth}{2}
-
-        \usepackage{amsmath,amsfonts,amssymb,amsthm}
-        \usepackage{graphicx}
-        \graphicspath{ {./_static/} }
-
-        %%% reduce spaces for Table of contents, figures and tables
-        %%% it is used "\addtocontents{toc}{\vskip -1.2cm}" etc. in the document
-        \usepackage[notlot,nottoc,notlof]{}
-
-        \usepackage{color}
-        \usepackage{transparent}
-        \usepackage{eso-pic}
-        \usepackage{lipsum}
-        \usepackage{longtable}
                
-        
-        \usepackage{footnotebackref} %%link at the footnote to go to the place of footnote in the text
-
-        %% spacing between line
-        \usepackage{setspace}
-        %%%%\onehalfspacing
-        %%%%\doublespacing
-        \singlespacing
-
-
-        %%%%%%%%%%% datetime
-        \usepackage{datetime}
-        \usepackage{svg}
-
-        \newdateformat{MonthYearFormat}{%
-            \monthname[\THEMONTH], \THEYEAR}
-
-
-        %% RO, LE will not work for 'oneside' layout.
-        %% Change oneside to twoside in document class
-        \usepackage{fancyhdr}
-        \pagestyle{fancy}
-        \fancyhf{}
-
-        %%% Alternating Header for oneside
-        \fancyhead[L]{\ifthenelse{\isodd{\value{page}}}{ \small \nouppercase{\leftmark} }{}}
-        \fancyhead[R]{\ifthenelse{\isodd{\value{page}}}{}{ \small \nouppercase{\rightmark} }}
-
-        %%% Alternating Header for two side
-        %\fancyhead[RO]{\small \nouppercase{\rightmark}}
-        %\fancyhead[LE]{\small \nouppercase{\leftmark}}
-
-        %% for oneside: change footer at right side. If you want to use Left and right then use same as header defined above.
-        \fancyfoot[R]{\ifthenelse{\isodd{\value{page}}}{{\tiny Meher Krishna Patel} }{\href{http://pythondsp.readthedocs.io/en/latest/pythondsp/toc.html}{\tiny PythonDSP}}}
-
-        %%% Alternating Footer for two side
-        %\fancyfoot[RO, RE]{\scriptsize Meher Krishna Patel (mekrip@gmail.com)}
-
-        %%% page number
-        \fancyfoot[CO, CE]{\thepage}
-
-        \renewcommand{\headrulewidth}{0.5pt}
-        \renewcommand{\footrulewidth}{0.5pt}
-
-        \RequirePackage{tocbibind} %%% comment this to remove page number for following
-        \addto\captionsenglish{\renewcommand{\contentsname}{Оглавление}}
-        % \addto\captionsenglish{\renewcommand{\listfigurename}{List of figures}}
-        % \addto\captionsenglish{\renewcommand{\listtablename}{List of tables}}
-        % \addto\captionsenglish{\renewcommand{\chaptername}{Chapter}}
-
-
-        %%reduce spacing for itemize
-        \usepackage{enumitem}
-        \setlist{nosep}
-
-        %%%%%%%%%%% Quote Styles at the top of chapter
-        \usepackage{epigraph}
-        \setlength{\epigraphwidth}{0.8\columnwidth}
-        \newcommand{\chapterquote}[2]{\epigraphhead[60]{\epigraph{\textit{#1}}{\textbf {\textit{--#2}}}}}
-        %%%%%%%%%%% Quote for all places except Chapter
-        \newcommand{\sectionquote}[2]{{\quote{\textit{``#1''}}{\textbf {\textit{--#2}}}}}
-    ''',
-
-
-    'maketitle': r'''
-        \pagenumbering{Roman} %%% to avoid page 1 conflict with actual page 1
-
-        \begin{titlepage}
-        
-           \begin{figure}[h]
-                \raggedleft
-                \includegraphics{C:/Users/rzi1/InfoRZA/docs/source/_static/UtvBindovsky.png}
-            \end{figure}
-
-%           \large
-%           \leftskip=300pt УТВЕРЖДАЮ\\
-%            Первый заместитель директора-\\
-%            главный инженер\\
-%            {\_}{\_}{\_}{\_}{\_}{\_}С.О.Биндовский\\
-%            13.04.2022г.\\
-           
-           \leftskip=20pt
-           \vspace{120pt}
-           ИНСТРУКЦИЯ\\
-            24.03.2022г. №{\_}{\_}{\_}{\_}{\_}{\_}\\
-            г.Витебск\\
-            по эксплуатации РЗА ВСРЭС
-        \end{titlepage}
-        \clearpage
-        \clearpage
-        \renewcommand\contentsname{Оглавление}
-        \tableofcontents
-        \pagenumbering{arabic}
-        \clearpage
-
-        ''',
-    # Latex figure (float) alignment
-    #
-    # 'figure_align': 'htbp',
-    'sphinxsetup': \
-        'hmargin={0.7in,0.7in}, vmargin={1in,1in}, \
-        verbatimwithframe=true, \
-        TitleColor={rgb}{0,0,0}, \
-        HeaderFamily=\\rmfamily\\bfseries, \
-        InnerLinkColor={rgb}{0,0,1}, \
-        OuterLinkColor={rgb}{0,0,1}',
-
-        'tableofcontents':'',
-
-
-
-}
-    latex_documents = [
-        ('index_vsres', 'sphinx.tex', 'Инструкция по эксплуатации РЗА ВСРЭС',
-         '', 'report')]
-elif choice == 5:
-    latex_elements = {
-        # The paper size ('letterpaper' or 'a4paper').
-        #
-        'papersize': 'a4paper',
-        'releasename': " ",
-        # Sonny, Lenny, Glenn, Conny, Rejne, Bjarne and Bjornstrup
-        # 'fncychap': '\\usepackage[Lenny]{fncychap}',
-        'fncychap': '\\usepackage{fncychap}',
-        'fontpkg': '\\usepackage{amsmath,amsfonts,amssymb,amsthm}',
-
-        'figure_align': 'htbp',
-        # The font size ('10pt', '11pt' or '12pt').
-        #
-        'pointsize': '12pt',
-
-        # Additional stuff for the LaTeX preamble.
-        #
-        'preamble': r'''
-            %%%%%%%%%%%%%%%%%%%% Meher %%%%%%%%%%%%%%%%%%
-            %%%add number to subsubsection 2=subsection, 3=subsubsection
-            %%% below subsubsection is not good idea.
-            \setcounter{secnumdepth}{3}
-            %
-            %%%% Table of content upto 2=subsection, 3=subsubsection
-            \setcounter{tocdepth}{2}
-
-            \usepackage{amsmath,amsfonts,amssymb,amsthm}
-            \usepackage{graphicx}
-            \graphicspath{ {./_static/} }
-
-            %%% reduce spaces for Table of contents, figures and tables
-            %%% it is used "\addtocontents{toc}{\vskip -1.2cm}" etc. in the document
-            \usepackage[notlot,nottoc,notlof]{}
-
-            \usepackage{color}
-            \usepackage{transparent}
-            \usepackage{eso-pic}
-            \usepackage{lipsum}
-            \usepackage{longtable}
-
-
-            \usepackage{footnotebackref} %%link at the footnote to go to the place of footnote in the text
-
-            %% spacing between line
-            \usepackage{setspace}
-            %%%%\onehalfspacing
-            %%%%\doublespacing
-            \singlespacing
-
-
-            %%%%%%%%%%% datetime
-            \usepackage{datetime}
-            \usepackage{svg}
-
-            \newdateformat{MonthYearFormat}{%
-                \monthname[\THEMONTH], \THEYEAR}
-
-
-            %% RO, LE will not work for 'oneside' layout.
-            %% Change oneside to twoside in document class
-            \usepackage{fancyhdr}
-            \pagestyle{fancy}
-            \fancyhf{}
-
-            %%% Alternating Header for oneside
-            \fancyhead[L]{\ifthenelse{\isodd{\value{page}}}{ \small \nouppercase{\leftmark} }{}}
-            \fancyhead[R]{\ifthenelse{\isodd{\value{page}}}{}{ \small \nouppercase{\rightmark} }}
-
-            %%% Alternating Header for two side
-            %\fancyhead[RO]{\small \nouppercase{\rightmark}}
-            %\fancyhead[LE]{\small \nouppercase{\leftmark}}
-
-            %% for oneside: change footer at right side. If you want to use Left and right then use same as header defined above.
-            \fancyfoot[R]{\ifthenelse{\isodd{\value{page}}}{{\tiny Meher Krishna Patel} }{\href{http://pythondsp.readthedocs.io/en/latest/pythondsp/toc.html}{\tiny PythonDSP}}}
-
-            %%% Alternating Footer for two side
-            %\fancyfoot[RO, RE]{\scriptsize Meher Krishna Patel (mekrip@gmail.com)}
-
-            %%% page number
-            \fancyfoot[CO, CE]{\thepage}
-
-            \renewcommand{\headrulewidth}{0.5pt}
-            \renewcommand{\footrulewidth}{0.5pt}
-
-            \RequirePackage{tocbibind} %%% comment this to remove page number for following
-            \addto\captionsenglish{\renewcommand{\contentsname}{Оглавление}}
-            % \addto\captionsenglish{\renewcommand{\listfigurename}{List of figures}}
-            % \addto\captionsenglish{\renewcommand{\listtablename}{List of tables}}
-            % \addto\captionsenglish{\renewcommand{\chaptername}{Chapter}}
-
-
-            %%reduce spacing for itemize
-            \usepackage{enumitem}
-            \setlist{nosep}
-
-            %%%%%%%%%%% Quote Styles at the top of chapter
-            \usepackage{epigraph}
-            \setlength{\epigraphwidth}{0.8\columnwidth}
-            \newcommand{\chapterquote}[2]{\epigraphhead[60]{\epigraph{\textit{#1}}{\textbf {\textit{--#2}}}}}
-            %%%%%%%%%%% Quote for all places except Chapter
-            \newcommand{\sectionquote}[2]{{\quote{\textit{``#1''}}{\textbf {\textit{--#2}}}}}
-        ''',
-
-        'maketitle': r'''
-            \pagenumbering{Roman} %%% to avoid page 1 conflict with actual page 1
-
-            \begin{titlepage}
-
-               \begin{figure}[h]
-                    \raggedleft
-                    \includegraphics{C:/Users/rzi1/InfoRZA/docs/source/_static/UtvBindovsky.png}
-                \end{figure}
-
-    %           \large
-    %           \leftskip=300pt УТВЕРЖДАЮ\\
-    %            Первый заместитель директора-\\
-    %            главный инженер\\
-    %            {\_}{\_}{\_}{\_}{\_}{\_}С.О.Биндовский\\
-    %            13.04.2022г.\\
-
                \leftskip=20pt
                \vspace{120pt}
                ИНСТРУКЦИЯ\\
-                11.04.2022г. №{\_}{\_}{\_}{\_}{\_}{\_}\\
+                24.03.2022г. №{\_}{\_}{\_}{\_}{\_}{\_}\\
                 г.Витебск\\
-                по эксплуатации РЗА ГРЭС
+                по эксплуатации РЗА ВСРЭС
             \end{titlepage}
             \clearpage
             \clearpage
@@ -821,7 +665,7 @@ elif choice == 5:
             \tableofcontents
             \pagenumbering{arabic}
             \clearpage
-
+    
             ''',
         # Latex figure (float) alignment
         #
@@ -834,318 +678,473 @@ elif choice == 5:
             InnerLinkColor={rgb}{0,0,1}, \
             OuterLinkColor={rgb}{0,0,1}',
 
-        'tableofcontents': '',
+            'tableofcontents':'',
+
+
 
     }
-    latex_documents = [
-        ('index_gres', 'sphinx.tex', 'Инструкция по эксплуатации РЗА ГРЭС',
-         '', 'report')]
-elif choice == 6:
-    latex_elements = {
-        # The paper size ('letterpaper' or 'a4paper').
-        #
-        'papersize': 'a4paper',
-        'releasename': " ",
-        # Sonny, Lenny, Glenn, Conny, Rejne, Bjarne and Bjornstrup
-        # 'fncychap': '\\usepackage[Lenny]{fncychap}',
-        'fncychap': '\\usepackage{fncychap}',
-        'fontpkg': '\\usepackage{amsmath,amsfonts,amssymb,amsthm}',
+        latex_documents = [
+            ('index_vsres', 'sphinx.tex', 'Инструкция по эксплуатации РЗА ВСРЭС',
+             '', 'report')]
+    elif choice == 5:
+        latex_elements = {
+            # The paper size ('letterpaper' or 'a4paper').
+            #
+            'papersize': 'a4paper',
+            'releasename': " ",
+            # Sonny, Lenny, Glenn, Conny, Rejne, Bjarne and Bjornstrup
+            # 'fncychap': '\\usepackage[Lenny]{fncychap}',
+            'fncychap': '\\usepackage{fncychap}',
+            'fontpkg': '\\usepackage{amsmath,amsfonts,amssymb,amsthm}',
 
-        'figure_align': 'htbp',
-        # The font size ('10pt', '11pt' or '12pt').
-        #
-        'pointsize': '12pt',
+            'figure_align': 'htbp',
+            # The font size ('10pt', '11pt' or '12pt').
+            #
+            'pointsize': '12pt',
 
-        # Additional stuff for the LaTeX preamble.
-        #
-        'preamble': r'''
-            %%%%%%%%%%%%%%%%%%%% Meher %%%%%%%%%%%%%%%%%%
-            %%%add number to subsubsection 2=subsection, 3=subsubsection
-            %%% below subsubsection is not good idea.
-            \setcounter{secnumdepth}{3}
-            %
-            %%%% Table of content upto 2=subsection, 3=subsubsection
-            \setcounter{tocdepth}{2}
-
-            \usepackage{amsmath,amsfonts,amssymb,amsthm}
-            \usepackage{graphicx}
-            \graphicspath{ {./_static/} }
-
-            %%% reduce spaces for Table of contents, figures and tables
-            %%% it is used "\addtocontents{toc}{\vskip -1.2cm}" etc. in the document
-            \usepackage[notlot,nottoc,notlof]{}
-
-            \usepackage{color}
-            \usepackage{transparent}
-            \usepackage{eso-pic}
-            \usepackage{lipsum}
-            \usepackage{longtable}
-
-
-            \usepackage{footnotebackref} %%link at the footnote to go to the place of footnote in the text
-
-            %% spacing between line
-            \usepackage{setspace}
-            %%%%\onehalfspacing
-            %%%%\doublespacing
-            \singlespacing
-
-
-            %%%%%%%%%%% datetime
-            \usepackage{datetime}
-            \usepackage{svg}
-
-            \newdateformat{MonthYearFormat}{%
-                \monthname[\THEMONTH], \THEYEAR}
-
-
-            %% RO, LE will not work for 'oneside' layout.
-            %% Change oneside to twoside in document class
-            \usepackage{fancyhdr}
-            \pagestyle{fancy}
-            \fancyhf{}
-
-            %%% Alternating Header for oneside
-            \fancyhead[L]{\ifthenelse{\isodd{\value{page}}}{ \small \nouppercase{\leftmark} }{}}
-            \fancyhead[R]{\ifthenelse{\isodd{\value{page}}}{}{ \small \nouppercase{\rightmark} }}
-
-            %%% Alternating Header for two side
-            %\fancyhead[RO]{\small \nouppercase{\rightmark}}
-            %\fancyhead[LE]{\small \nouppercase{\leftmark}}
-
-            %% for oneside: change footer at right side. If you want to use Left and right then use same as header defined above.
-            \fancyfoot[R]{\ifthenelse{\isodd{\value{page}}}{{\tiny Meher Krishna Patel} }{\href{http://pythondsp.readthedocs.io/en/latest/pythondsp/toc.html}{\tiny PythonDSP}}}
-
-            %%% Alternating Footer for two side
-            %\fancyfoot[RO, RE]{\scriptsize Meher Krishna Patel (mekrip@gmail.com)}
-
-            %%% page number
-            \fancyfoot[CO, CE]{\thepage}
-
-            \renewcommand{\headrulewidth}{0.5pt}
-            \renewcommand{\footrulewidth}{0.5pt}
-
-            \RequirePackage{tocbibind} %%% comment this to remove page number for following
-            \addto\captionsenglish{\renewcommand{\contentsname}{Оглавление}}
-            % \addto\captionsenglish{\renewcommand{\listfigurename}{List of figures}}
-            % \addto\captionsenglish{\renewcommand{\listtablename}{List of tables}}
-            % \addto\captionsenglish{\renewcommand{\chaptername}{Chapter}}
-
-
-            %%reduce spacing for itemize
-            \usepackage{enumitem}
-            \setlist{nosep}
-
-            %%%%%%%%%%% Quote Styles at the top of chapter
-            \usepackage{epigraph}
-            \setlength{\epigraphwidth}{0.8\columnwidth}
-            \newcommand{\chapterquote}[2]{\epigraphhead[60]{\epigraph{\textit{#1}}{\textbf {\textit{--#2}}}}}
-            %%%%%%%%%%% Quote for all places except Chapter
-            \newcommand{\sectionquote}[2]{{\quote{\textit{``#1''}}{\textbf {\textit{--#2}}}}}
-        ''',
-
-        'maketitle': r'''
-            \pagenumbering{Roman} %%% to avoid page 1 conflict with actual page 1
-
-            \begin{titlepage}
-
-               \begin{figure}[h]
-                    \raggedleft
-                    \includegraphics{C:/Users/rzi1/InfoRZA/docs/source/_static/UtvBindovsky.png}
-                \end{figure}
-
-    %           \large
-    %           \leftskip=300pt УТВЕРЖДАЮ\\
-    %            Первый заместитель директора-\\
-    %            главный инженер\\
-    %            {\_}{\_}{\_}{\_}{\_}{\_}С.О.Биндовский\\
-    %            13.04.2022г.\\
-
-               \leftskip=20pt
-               \vspace{120pt}
-               ИНСТРУКЦИЯ\\
-                10.03.2022г. №{\_}{\_}{\_}{\_}{\_}{\_}\\
-                г.Витебск\\
-                по эксплуатации РЗА ШРЭС
-            \end{titlepage}
-            \clearpage
-            \clearpage
-            \renewcommand\contentsname{Оглавление}
-            \tableofcontents
-            \pagenumbering{arabic}
-            \clearpage
-
+            # Additional stuff for the LaTeX preamble.
+            #
+            'preamble': r'''
+                %%%%%%%%%%%%%%%%%%%% Meher %%%%%%%%%%%%%%%%%%
+                %%%add number to subsubsection 2=subsection, 3=subsubsection
+                %%% below subsubsection is not good idea.
+                \setcounter{secnumdepth}{3}
+                %
+                %%%% Table of content upto 2=subsection, 3=subsubsection
+                \setcounter{tocdepth}{2}
+    
+                \usepackage{amsmath,amsfonts,amssymb,amsthm}
+                \usepackage{graphicx}
+                \graphicspath{ {./_static/} }
+    
+                %%% reduce spaces for Table of contents, figures and tables
+                %%% it is used "\addtocontents{toc}{\vskip -1.2cm}" etc. in the document
+                \usepackage[notlot,nottoc,notlof]{}
+    
+                \usepackage{color}
+                \usepackage{transparent}
+                \usepackage{eso-pic}
+                \usepackage{lipsum}
+                \usepackage{longtable}
+    
+    
+                \usepackage{footnotebackref} %%link at the footnote to go to the place of footnote in the text
+    
+                %% spacing between line
+                \usepackage{setspace}
+                %%%%\onehalfspacing
+                %%%%\doublespacing
+                \singlespacing
+    
+    
+                %%%%%%%%%%% datetime
+                \usepackage{datetime}
+                \usepackage{svg}
+    
+                \newdateformat{MonthYearFormat}{%
+                    \monthname[\THEMONTH], \THEYEAR}
+    
+    
+                %% RO, LE will not work for 'oneside' layout.
+                %% Change oneside to twoside in document class
+                \usepackage{fancyhdr}
+                \pagestyle{fancy}
+                \fancyhf{}
+    
+                %%% Alternating Header for oneside
+                \fancyhead[L]{\ifthenelse{\isodd{\value{page}}}{ \small \nouppercase{\leftmark} }{}}
+                \fancyhead[R]{\ifthenelse{\isodd{\value{page}}}{}{ \small \nouppercase{\rightmark} }}
+    
+                %%% Alternating Header for two side
+                %\fancyhead[RO]{\small \nouppercase{\rightmark}}
+                %\fancyhead[LE]{\small \nouppercase{\leftmark}}
+    
+                %% for oneside: change footer at right side. If you want to use Left and right then use same as header defined above.
+                \fancyfoot[R]{\ifthenelse{\isodd{\value{page}}}{{\tiny Meher Krishna Patel} }{\href{http://pythondsp.readthedocs.io/en/latest/pythondsp/toc.html}{\tiny PythonDSP}}}
+    
+                %%% Alternating Footer for two side
+                %\fancyfoot[RO, RE]{\scriptsize Meher Krishna Patel (mekrip@gmail.com)}
+    
+                %%% page number
+                \fancyfoot[CO, CE]{\thepage}
+    
+                \renewcommand{\headrulewidth}{0.5pt}
+                \renewcommand{\footrulewidth}{0.5pt}
+    
+                \RequirePackage{tocbibind} %%% comment this to remove page number for following
+                \addto\captionsenglish{\renewcommand{\contentsname}{Оглавление}}
+                % \addto\captionsenglish{\renewcommand{\listfigurename}{List of figures}}
+                % \addto\captionsenglish{\renewcommand{\listtablename}{List of tables}}
+                % \addto\captionsenglish{\renewcommand{\chaptername}{Chapter}}
+    
+    
+                %%reduce spacing for itemize
+                \usepackage{enumitem}
+                \setlist{nosep}
+    
+                %%%%%%%%%%% Quote Styles at the top of chapter
+                \usepackage{epigraph}
+                \setlength{\epigraphwidth}{0.8\columnwidth}
+                \newcommand{\chapterquote}[2]{\epigraphhead[60]{\epigraph{\textit{#1}}{\textbf {\textit{--#2}}}}}
+                %%%%%%%%%%% Quote for all places except Chapter
+                \newcommand{\sectionquote}[2]{{\quote{\textit{``#1''}}{\textbf {\textit{--#2}}}}}
             ''',
-        # Latex figure (float) alignment
-        #
-        # 'figure_align': 'htbp',
-        'sphinxsetup': \
-            'hmargin={0.7in,0.7in}, vmargin={1in,1in}, \
-            verbatimwithframe=true, \
-            TitleColor={rgb}{0,0,0}, \
-            HeaderFamily=\\rmfamily\\bfseries, \
-            InnerLinkColor={rgb}{0,0,1}, \
-            OuterLinkColor={rgb}{0,0,1}',
 
-        'tableofcontents': '',
+            'maketitle': r'''
+                \pagenumbering{Roman} %%% to avoid page 1 conflict with actual page 1
+    
+                \begin{titlepage}
+    
+                   \begin{figure}[h]
+                        \raggedleft
+                        \includegraphics{C:/Users/rzi1/InfoRZA/docs/source/_static/UtvBindovsky.png}
+                    \end{figure}
+    
+        %           \large
+        %           \leftskip=300pt УТВЕРЖДАЮ\\
+        %            Первый заместитель директора-\\
+        %            главный инженер\\
+        %            {\_}{\_}{\_}{\_}{\_}{\_}С.О.Биндовский\\
+        %            13.04.2022г.\\
+    
+                   \leftskip=20pt
+                   \vspace{120pt}
+                   ИНСТРУКЦИЯ\\
+                    11.04.2022г. №{\_}{\_}{\_}{\_}{\_}{\_}\\
+                    г.Витебск\\
+                    по эксплуатации РЗА ГРЭС
+                \end{titlepage}
+                \clearpage
+                \clearpage
+                \renewcommand\contentsname{Оглавление}
+                \tableofcontents
+                \pagenumbering{arabic}
+                \clearpage
+    
+                ''',
+            # Latex figure (float) alignment
+            #
+            # 'figure_align': 'htbp',
+            'sphinxsetup': \
+                'hmargin={0.7in,0.7in}, vmargin={1in,1in}, \
+                verbatimwithframe=true, \
+                TitleColor={rgb}{0,0,0}, \
+                HeaderFamily=\\rmfamily\\bfseries, \
+                InnerLinkColor={rgb}{0,0,1}, \
+                OuterLinkColor={rgb}{0,0,1}',
 
-    }
-    latex_documents = [
-        ('index_shres', 'sphinx.tex', 'Инструкция по эксплуатации РЗА ШРЭС',
-         '', 'report')]
-elif choice == 7:
-    latex_elements = {
-        # The paper size ('letterpaper' or 'a4paper').
-        #
-        'papersize': 'a4paper',
-        'releasename': " ",
-        # Sonny, Lenny, Glenn, Conny, Rejne, Bjarne and Bjornstrup
-        # 'fncychap': '\\usepackage[Lenny]{fncychap}',
-        'fncychap': '\\usepackage{fncychap}',
-        'fontpkg': '\\usepackage{amsmath,amsfonts,amssymb,amsthm}',
+            'tableofcontents': '',
 
-        'figure_align': 'htbp',
-        # The font size ('10pt', '11pt' or '12pt').
-        #
-        'pointsize': '12pt',
+        }
+        latex_documents = [
+            ('index_gres', 'sphinx.tex', 'Инструкция по эксплуатации РЗА ГРЭС',
+             '', 'report')]
+    elif choice == 6:
+        latex_elements = {
+            # The paper size ('letterpaper' or 'a4paper').
+            #
+            'papersize': 'a4paper',
+            'releasename': " ",
+            # Sonny, Lenny, Glenn, Conny, Rejne, Bjarne and Bjornstrup
+            # 'fncychap': '\\usepackage[Lenny]{fncychap}',
+            'fncychap': '\\usepackage{fncychap}',
+            'fontpkg': '\\usepackage{amsmath,amsfonts,amssymb,amsthm}',
 
-        # Additional stuff for the LaTeX preamble.
-        #
-        'preamble': r'''
-            %%%%%%%%%%%%%%%%%%%% Meher %%%%%%%%%%%%%%%%%%
-            %%%add number to subsubsection 2=subsection, 3=subsubsection
-            %%% below subsubsection is not good idea.
-            \setcounter{secnumdepth}{3}
-            %
-            %%%% Table of content upto 2=subsection, 3=subsubsection
-            \setcounter{tocdepth}{2}
+            'figure_align': 'htbp',
+            # The font size ('10pt', '11pt' or '12pt').
+            #
+            'pointsize': '12pt',
 
-            \usepackage{amsmath,amsfonts,amssymb,amsthm}
-            \usepackage{graphicx}
-            \graphicspath{ {./_static/} }
-
-            %%% reduce spaces for Table of contents, figures and tables
-            %%% it is used "\addtocontents{toc}{\vskip -1.2cm}" etc. in the document
-            \usepackage[notlot,nottoc,notlof]{}
-
-            \usepackage{color}
-            \usepackage{transparent}
-            \usepackage{eso-pic}
-            \usepackage{lipsum}
-            \usepackage{longtable}
-
-
-            \usepackage{footnotebackref} %%link at the footnote to go to the place of footnote in the text
-
-            %% spacing between line
-            \usepackage{setspace}
-            %%%%\onehalfspacing
-            %%%%\doublespacing
-            \singlespacing
-
-
-            %%%%%%%%%%% datetime
-            \usepackage{datetime}
-            \usepackage{svg}
-
-            \newdateformat{MonthYearFormat}{%
-                \monthname[\THEMONTH], \THEYEAR}
-
-
-            %% RO, LE will not work for 'oneside' layout.
-            %% Change oneside to twoside in document class
-            \usepackage{fancyhdr}
-            \pagestyle{fancy}
-            \fancyhf{}
-
-            %%% Alternating Header for oneside
-            \fancyhead[L]{\ifthenelse{\isodd{\value{page}}}{ \small \nouppercase{\leftmark} }{}}
-            \fancyhead[R]{\ifthenelse{\isodd{\value{page}}}{}{ \small \nouppercase{\rightmark} }}
-
-            %%% Alternating Header for two side
-            %\fancyhead[RO]{\small \nouppercase{\rightmark}}
-            %\fancyhead[LE]{\small \nouppercase{\leftmark}}
-
-            %% for oneside: change footer at right side. If you want to use Left and right then use same as header defined above.
-            \fancyfoot[R]{\ifthenelse{\isodd{\value{page}}}{{\tiny Meher Krishna Patel} }{\href{http://pythondsp.readthedocs.io/en/latest/pythondsp/toc.html}{\tiny PythonDSP}}}
-
-            %%% Alternating Footer for two side
-            %\fancyfoot[RO, RE]{\scriptsize Meher Krishna Patel (mekrip@gmail.com)}
-
-            %%% page number
-            \fancyfoot[CO, CE]{\thepage}
-
-            \renewcommand{\headrulewidth}{0.5pt}
-            \renewcommand{\footrulewidth}{0.5pt}
-
-            \RequirePackage{tocbibind} %%% comment this to remove page number for following
-            \addto\captionsenglish{\renewcommand{\contentsname}{Оглавление}}
-            % \addto\captionsenglish{\renewcommand{\listfigurename}{List of figures}}
-            % \addto\captionsenglish{\renewcommand{\listtablename}{List of tables}}
-            % \addto\captionsenglish{\renewcommand{\chaptername}{Chapter}}
-
-
-            %%reduce spacing for itemize
-            \usepackage{enumitem}
-            \setlist{nosep}
-
-            %%%%%%%%%%% Quote Styles at the top of chapter
-            \usepackage{epigraph}
-            \setlength{\epigraphwidth}{0.8\columnwidth}
-            \newcommand{\chapterquote}[2]{\epigraphhead[60]{\epigraph{\textit{#1}}{\textbf {\textit{--#2}}}}}
-            %%%%%%%%%%% Quote for all places except Chapter
-            \newcommand{\sectionquote}[2]{{\quote{\textit{``#1''}}{\textbf {\textit{--#2}}}}}
-        ''',
-
-        'maketitle': r'''
-            \pagenumbering{Roman} %%% to avoid page 1 conflict with actual page 1
-
-            \begin{titlepage}
-
-               \begin{figure}[h]
-                    \raggedleft
-                    \includegraphics{C:/Users/rzi1/InfoRZA/docs/source/_static/UtvBindovsky.png}
-                \end{figure}
-
-    %           \large
-    %           \leftskip=300pt УТВЕРЖДАЮ\\
-    %            Первый заместитель директора-\\
-    %            главный инженер\\
-    %            {\_}{\_}{\_}{\_}{\_}{\_}С.О.Биндовский\\
-    %            20.04.2022г.\\
-
-               \leftskip=20pt
-               \vspace{120pt}
-               ИНСТРУКЦИЯ\\
-                15.02.2022г. №{\_}{\_}{\_}{\_}{\_}{\_}\\
-                г.Витебск\\
-                по эксплуатации РЗА РРЭС
-            \end{titlepage}
-            \clearpage
-            \clearpage
-            \renewcommand\contentsname{Оглавление}
-            \tableofcontents
-            \pagenumbering{arabic}
-            \clearpage
-
+            # Additional stuff for the LaTeX preamble.
+            #
+            'preamble': r'''
+                %%%%%%%%%%%%%%%%%%%% Meher %%%%%%%%%%%%%%%%%%
+                %%%add number to subsubsection 2=subsection, 3=subsubsection
+                %%% below subsubsection is not good idea.
+                \setcounter{secnumdepth}{3}
+                %
+                %%%% Table of content upto 2=subsection, 3=subsubsection
+                \setcounter{tocdepth}{2}
+    
+                \usepackage{amsmath,amsfonts,amssymb,amsthm}
+                \usepackage{graphicx}
+                \graphicspath{ {./_static/} }
+    
+                %%% reduce spaces for Table of contents, figures and tables
+                %%% it is used "\addtocontents{toc}{\vskip -1.2cm}" etc. in the document
+                \usepackage[notlot,nottoc,notlof]{}
+    
+                \usepackage{color}
+                \usepackage{transparent}
+                \usepackage{eso-pic}
+                \usepackage{lipsum}
+                \usepackage{longtable}
+    
+    
+                \usepackage{footnotebackref} %%link at the footnote to go to the place of footnote in the text
+    
+                %% spacing between line
+                \usepackage{setspace}
+                %%%%\onehalfspacing
+                %%%%\doublespacing
+                \singlespacing
+    
+    
+                %%%%%%%%%%% datetime
+                \usepackage{datetime}
+                \usepackage{svg}
+    
+                \newdateformat{MonthYearFormat}{%
+                    \monthname[\THEMONTH], \THEYEAR}
+    
+    
+                %% RO, LE will not work for 'oneside' layout.
+                %% Change oneside to twoside in document class
+                \usepackage{fancyhdr}
+                \pagestyle{fancy}
+                \fancyhf{}
+    
+                %%% Alternating Header for oneside
+                \fancyhead[L]{\ifthenelse{\isodd{\value{page}}}{ \small \nouppercase{\leftmark} }{}}
+                \fancyhead[R]{\ifthenelse{\isodd{\value{page}}}{}{ \small \nouppercase{\rightmark} }}
+    
+                %%% Alternating Header for two side
+                %\fancyhead[RO]{\small \nouppercase{\rightmark}}
+                %\fancyhead[LE]{\small \nouppercase{\leftmark}}
+    
+                %% for oneside: change footer at right side. If you want to use Left and right then use same as header defined above.
+                \fancyfoot[R]{\ifthenelse{\isodd{\value{page}}}{{\tiny Meher Krishna Patel} }{\href{http://pythondsp.readthedocs.io/en/latest/pythondsp/toc.html}{\tiny PythonDSP}}}
+    
+                %%% Alternating Footer for two side
+                %\fancyfoot[RO, RE]{\scriptsize Meher Krishna Patel (mekrip@gmail.com)}
+    
+                %%% page number
+                \fancyfoot[CO, CE]{\thepage}
+    
+                \renewcommand{\headrulewidth}{0.5pt}
+                \renewcommand{\footrulewidth}{0.5pt}
+    
+                \RequirePackage{tocbibind} %%% comment this to remove page number for following
+                \addto\captionsenglish{\renewcommand{\contentsname}{Оглавление}}
+                % \addto\captionsenglish{\renewcommand{\listfigurename}{List of figures}}
+                % \addto\captionsenglish{\renewcommand{\listtablename}{List of tables}}
+                % \addto\captionsenglish{\renewcommand{\chaptername}{Chapter}}
+    
+    
+                %%reduce spacing for itemize
+                \usepackage{enumitem}
+                \setlist{nosep}
+    
+                %%%%%%%%%%% Quote Styles at the top of chapter
+                \usepackage{epigraph}
+                \setlength{\epigraphwidth}{0.8\columnwidth}
+                \newcommand{\chapterquote}[2]{\epigraphhead[60]{\epigraph{\textit{#1}}{\textbf {\textit{--#2}}}}}
+                %%%%%%%%%%% Quote for all places except Chapter
+                \newcommand{\sectionquote}[2]{{\quote{\textit{``#1''}}{\textbf {\textit{--#2}}}}}
             ''',
-        # Latex figure (float) alignment
-        #
-        # 'figure_align': 'htbp',
-        'sphinxsetup': \
-            'hmargin={0.7in,0.7in}, vmargin={1in,1in}, \
-            verbatimwithframe=true, \
-            TitleColor={rgb}{0,0,0}, \
-            HeaderFamily=\\rmfamily\\bfseries, \
-            InnerLinkColor={rgb}{0,0,1}, \
-            OuterLinkColor={rgb}{0,0,1}',
 
-        'tableofcontents': '',
+            'maketitle': r'''
+                \pagenumbering{Roman} %%% to avoid page 1 conflict with actual page 1
+    
+                \begin{titlepage}
+    
+                   \begin{figure}[h]
+                        \raggedleft
+                        \includegraphics{C:/Users/rzi1/InfoRZA/docs/source/_static/UtvBindovsky.png}
+                    \end{figure}
+    
+        %           \large
+        %           \leftskip=300pt УТВЕРЖДАЮ\\
+        %            Первый заместитель директора-\\
+        %            главный инженер\\
+        %            {\_}{\_}{\_}{\_}{\_}{\_}С.О.Биндовский\\
+        %            13.04.2022г.\\
+    
+                   \leftskip=20pt
+                   \vspace{120pt}
+                   ИНСТРУКЦИЯ\\
+                    10.03.2022г. №{\_}{\_}{\_}{\_}{\_}{\_}\\
+                    г.Витебск\\
+                    по эксплуатации РЗА ШРЭС
+                \end{titlepage}
+                \clearpage
+                \clearpage
+                \renewcommand\contentsname{Оглавление}
+                \tableofcontents
+                \pagenumbering{arabic}
+                \clearpage
+    
+                ''',
+            # Latex figure (float) alignment
+            #
+            # 'figure_align': 'htbp',
+            'sphinxsetup': \
+                'hmargin={0.7in,0.7in}, vmargin={1in,1in}, \
+                verbatimwithframe=true, \
+                TitleColor={rgb}{0,0,0}, \
+                HeaderFamily=\\rmfamily\\bfseries, \
+                InnerLinkColor={rgb}{0,0,1}, \
+                OuterLinkColor={rgb}{0,0,1}',
 
-    }
-    latex_documents = [
-        ('index_rres', 'sphinx.tex', 'Инструкция по эксплуатации РЗА РРЭС',
-         'Беспалов А.В.', 'report')]
+            'tableofcontents': '',
+
+        }
+        latex_documents = [
+            ('index_shres', 'sphinx.tex', 'Инструкция по эксплуатации РЗА ШРЭС',
+             '', 'report')]
+    elif choice == 7:
+        latex_elements = {
+            # The paper size ('letterpaper' or 'a4paper').
+            #
+            'papersize': 'a4paper',
+            'releasename': " ",
+            # Sonny, Lenny, Glenn, Conny, Rejne, Bjarne and Bjornstrup
+            # 'fncychap': '\\usepackage[Lenny]{fncychap}',
+            'fncychap': '\\usepackage{fncychap}',
+            'fontpkg': '\\usepackage{amsmath,amsfonts,amssymb,amsthm}',
+
+            'figure_align': 'htbp',
+            # The font size ('10pt', '11pt' or '12pt').
+            #
+            'pointsize': '12pt',
+
+            # Additional stuff for the LaTeX preamble.
+            #
+            'preamble': r'''
+                %%%%%%%%%%%%%%%%%%%% Meher %%%%%%%%%%%%%%%%%%
+                %%%add number to subsubsection 2=subsection, 3=subsubsection
+                %%% below subsubsection is not good idea.
+                \setcounter{secnumdepth}{3}
+                %
+                %%%% Table of content upto 2=subsection, 3=subsubsection
+                \setcounter{tocdepth}{2}
+    
+                \usepackage{amsmath,amsfonts,amssymb,amsthm}
+                \usepackage{graphicx}
+                \graphicspath{ {./_static/} }
+    
+                %%% reduce spaces for Table of contents, figures and tables
+                %%% it is used "\addtocontents{toc}{\vskip -1.2cm}" etc. in the document
+                \usepackage[notlot,nottoc,notlof]{}
+    
+                \usepackage{color}
+                \usepackage{transparent}
+                \usepackage{eso-pic}
+                \usepackage{lipsum}
+                \usepackage{longtable}
+    
+    
+                \usepackage{footnotebackref} %%link at the footnote to go to the place of footnote in the text
+    
+                %% spacing between line
+                \usepackage{setspace}
+                %%%%\onehalfspacing
+                %%%%\doublespacing
+                \singlespacing
+    
+    
+                %%%%%%%%%%% datetime
+                \usepackage{datetime}
+                \usepackage{svg}
+    
+                \newdateformat{MonthYearFormat}{%
+                    \monthname[\THEMONTH], \THEYEAR}
+    
+    
+                %% RO, LE will not work for 'oneside' layout.
+                %% Change oneside to twoside in document class
+                \usepackage{fancyhdr}
+                \pagestyle{fancy}
+                \fancyhf{}
+    
+                %%% Alternating Header for oneside
+                \fancyhead[L]{\ifthenelse{\isodd{\value{page}}}{ \small \nouppercase{\leftmark} }{}}
+                \fancyhead[R]{\ifthenelse{\isodd{\value{page}}}{}{ \small \nouppercase{\rightmark} }}
+    
+                %%% Alternating Header for two side
+                %\fancyhead[RO]{\small \nouppercase{\rightmark}}
+                %\fancyhead[LE]{\small \nouppercase{\leftmark}}
+    
+                %% for oneside: change footer at right side. If you want to use Left and right then use same as header defined above.
+                \fancyfoot[R]{\ifthenelse{\isodd{\value{page}}}{{\tiny Meher Krishna Patel} }{\href{http://pythondsp.readthedocs.io/en/latest/pythondsp/toc.html}{\tiny PythonDSP}}}
+    
+                %%% Alternating Footer for two side
+                %\fancyfoot[RO, RE]{\scriptsize Meher Krishna Patel (mekrip@gmail.com)}
+    
+                %%% page number
+                \fancyfoot[CO, CE]{\thepage}
+    
+                \renewcommand{\headrulewidth}{0.5pt}
+                \renewcommand{\footrulewidth}{0.5pt}
+    
+                \RequirePackage{tocbibind} %%% comment this to remove page number for following
+                \addto\captionsenglish{\renewcommand{\contentsname}{Оглавление}}
+                % \addto\captionsenglish{\renewcommand{\listfigurename}{List of figures}}
+                % \addto\captionsenglish{\renewcommand{\listtablename}{List of tables}}
+                % \addto\captionsenglish{\renewcommand{\chaptername}{Chapter}}
+    
+    
+                %%reduce spacing for itemize
+                \usepackage{enumitem}
+                \setlist{nosep}
+    
+                %%%%%%%%%%% Quote Styles at the top of chapter
+                \usepackage{epigraph}
+                \setlength{\epigraphwidth}{0.8\columnwidth}
+                \newcommand{\chapterquote}[2]{\epigraphhead[60]{\epigraph{\textit{#1}}{\textbf {\textit{--#2}}}}}
+                %%%%%%%%%%% Quote for all places except Chapter
+                \newcommand{\sectionquote}[2]{{\quote{\textit{``#1''}}{\textbf {\textit{--#2}}}}}
+            ''',
+
+            'maketitle': r'''
+                \pagenumbering{Roman} %%% to avoid page 1 conflict with actual page 1
+    
+                \begin{titlepage}
+    
+                   \begin{figure}[h]
+                        \raggedleft
+                        \includegraphics{C:/Users/rzi1/InfoRZA/docs/source/_static/UtvBindovsky.png}
+                    \end{figure}
+    
+        %           \large
+        %           \leftskip=300pt УТВЕРЖДАЮ\\
+        %            Первый заместитель директора-\\
+        %            главный инженер\\
+        %            {\_}{\_}{\_}{\_}{\_}{\_}С.О.Биндовский\\
+        %            20.04.2022г.\\
+    
+                   \leftskip=20pt
+                   \vspace{120pt}
+                   ИНСТРУКЦИЯ\\
+                    15.02.2022г. №{\_}{\_}{\_}{\_}{\_}{\_}\\
+                    г.Витебск\\
+                    по эксплуатации РЗА РРЭС
+                \end{titlepage}
+                \clearpage
+                \clearpage
+                \renewcommand\contentsname{Оглавление}
+                \tableofcontents
+                \pagenumbering{arabic}
+                \clearpage
+    
+                ''',
+            # Latex figure (float) alignment
+            #
+            # 'figure_align': 'htbp',
+            'sphinxsetup': \
+                'hmargin={0.7in,0.7in}, vmargin={1in,1in}, \
+                verbatimwithframe=true, \
+                TitleColor={rgb}{0,0,0}, \
+                HeaderFamily=\\rmfamily\\bfseries, \
+                InnerLinkColor={rgb}{0,0,1}, \
+                OuterLinkColor={rgb}{0,0,1}',
+
+            'tableofcontents': '',
+
+        }
+        latex_documents = [
+            ('index_rres', 'sphinx.tex', 'Инструкция по эксплуатации РЗА РРЭС',
+             'Беспалов А.В.', 'report')]
 
 latex_logo = '_static/logo.png'
 
