@@ -1,2 +1,2 @@
 make html
-timeout /t 10000
+TIMEOUT /T 20000
